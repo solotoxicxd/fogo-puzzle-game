@@ -4,7 +4,7 @@ class BoardState {
     this.goal_state = goal_state;
     this.size = size;
     this.path = path;
-    this.path_states = [...path_states]; // preserve previous path states
+    this.path_states = [...path_states]; // clone path states
     this.depth = depth;
     this.value = 0;
     this.empty_tile_row = null;
@@ -20,8 +20,10 @@ class BoardState {
   }
 
   setValue() {
-    // A* value = cost (depth) + heuristic
-    this.value = (this.size > 3 ? 0 : this.depth) + this.manhattanDistance();
+    // A* Evaluation: f(n) = g(n) + h(n)
+    const heuristic = this.manhattanDistance();
+    const cost = this.size > 3 ? 0 : this.depth;
+    this.value = cost + heuristic;
   }
 
   addPathState() {
@@ -30,30 +32,31 @@ class BoardState {
   }
 
   misplacedTiles() {
-    let result = 0;
-    for (let i = 0; i < this.state.length; i++) {
-      for (let j = 0; j < this.state[i].length; j++) {
+    let count = 0;
+    for (let i = 0; i < this.size; i++) {
+      for (let j = 0; j < this.size; j++) {
         if (
           this.state[i][j] !== 0 &&
           this.state[i][j] !== this.goal_state[i][j]
         ) {
-          result++;
+          count++;
         }
       }
     }
-    return result;
+    return count;
   }
 
   manhattanDistance() {
     let distance = 0;
     for (let i = 0; i < this.size; i++) {
       for (let j = 0; j < this.size; j++) {
-        const value = this.state[i][j];
-        if (value !== 0) {
+        const val = this.state[i][j];
+        if (val !== 0) {
           for (let x = 0; x < this.size; x++) {
             for (let y = 0; y < this.size; y++) {
-              if (this.goal_state[x][y] === value) {
+              if (this.goal_state[x][y] === val) {
                 distance += Math.abs(i - x) + Math.abs(j - y);
+                break;
               }
             }
           }
