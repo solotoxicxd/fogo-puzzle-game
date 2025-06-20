@@ -72,5 +72,18 @@
   <script src="solver.js"></script>
   <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="script.js"></script>
+  <!-- Result Modal -->
+<div id="completionModal" class="modal">
+  <div class="modal-content">
+    <h2>🎉 Puzzle Completed!</h2>
+    <p>You solved it in <strong><span id="finalMoves"></span> moves</strong>.</p>
+    <p>Your rank: <strong id="rankLabel"></strong></p>
+    <div class="button-group">
+      <button id="shareBtn" class="button">Share on X</button>
+      <button id="playAgainBtn" class="button">Play Again</button>
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
