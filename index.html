@@ -4,7 +4,12 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fogo Puzzle</title>
+
+  <!-- ✅ Styles -->
   <link rel="stylesheet" href="style.css" />
+
+  <!-- ✅ jQuery (required for Board.js) -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
 
@@ -25,10 +30,8 @@
 
   <!-- 📊 Move Counter -->
   <div class="move">Moves: <span>0</span></div>
-  
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-  <!-- 🔗 Scripts -->
+  <!-- 🔗 Scripts (Order matters!) -->
   <script src="js/FastPriorityQueue.js"></script>
   <script src="js/boardstate.js"></script>
   <script src="js/solver.js"></script>
