@@ -1,3 +1,5 @@
+let wasSolvedUsingButton = false;
+
 class Board {
   constructor(size = 3) {
     this.size = size;
@@ -8,7 +10,6 @@ class Board {
     this.moves = 0;
     this.solved = false;
 
-    // Load sound
     this.clickSound = new Audio("assets/audio/click.mp3");
     this.clickSound.volume = 0.6;
 
@@ -101,6 +102,7 @@ class Board {
     $(".move-counter span").text("0");
     this.updateBoard();
     this.solved = false;
+    wasSolvedUsingButton = false; // reset on shuffle
   }
 
   checkWin() {
@@ -108,6 +110,8 @@ class Board {
   }
 
   showResultPopup() {
+    if (wasSolvedUsingButton) return;
+
     this.solved = true;
     const moves = this.moves;
     let roast = "";
@@ -153,6 +157,7 @@ $(() => {
   });
 
   $("#solve-btn").on("click", () => {
+    wasSolvedUsingButton = true;
     alert("Solver AI is currently disabled for this version.");
   });
 });
