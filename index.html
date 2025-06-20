@@ -5,42 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fogo Puzzle</title>
   <link rel="stylesheet" href="style.css" />
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <div class="home-screen" id="home-screen">
-    <h1>🔥 Ready to get fired up?</h1>
-    <p>Challenge the flames. Solve the puzzle. Or get roasted.</p>
-    <button id="start-button">🔥 Start Puzzle</button>
-  </div>
+  <header>
+    <h1>Think you're fast? Solve the puzzle. Let the flames judge you.</h1>
+  </header>
 
-  <div class="puzzle-container" id="puzzle-container" style="display:none;">
-    <div class="sound-toggle">
-      <label for="sound-toggle">Sound:</label>
-      <input type="checkbox" id="sound-toggle" checked />
-    </div>
-    <div class="board" id="board"></div>
-    <div class="controls">
-      <button id="shuffle-btn">🔀 Shuffle</button>
-      <button id="solve-btn">🧠 Solve</button>
-    </div>
-    <div class="move-counter">Moves: <span id="move-count">0</span></div>
-  </div>
+  <main>
+    <div class="board-container">
+      <div class="board"></div>
 
-  <div class="modal" id="victory-modal">
-    <div class="modal-content">
-      <h2>🔥 You did it!</h2>
-      <p id="victory-message"></p>
-      <button id="share-x">🔁 Share on X</button>
-      <button onclick="location.reload()">🔁 Play Again</button>
+      <div class="controls">
+        <button id="shuffle-btn">Shuffle</button>
+        <button id="solve-btn">Solve</button>
+      </div>
+
+      <div class="move-counter">Moves: <span>0</span></div>
     </div>
-  </div>
+  </main>
 
   <footer>
     Made with ❤️‍🔥 by <a href="https://x.com/bytrizz404" target="_blank">@bytrizz404</a> |
-    Discord: bytrizz
+    Discord: <span>bytrizz</span>
   </footer>
 
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <script src="script.js"></script>
+  <script src="js/FastPriorityQueue.js"></script>
+  <script src="js/boardstate.js"></script>
+  <script src="js/solver.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
