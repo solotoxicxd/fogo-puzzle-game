@@ -1,8 +1,7 @@
-// Default settings
+// === Default Settings ===
 const DEFAULT_SIZE = 3;
 let DEFAULT_BOARD_SIZE = 500;
 
-// Available puzzle images
 const IMAGES = [
   "assets/images/fogo1.png",
   "assets/images/fogo2.png",
@@ -11,62 +10,82 @@ const IMAGES = [
   "assets/images/fogo5.png"
 ];
 
-// Sound effects
+// === Audio Effects ===
 const clickSound = new Audio("assets/audio/click.mp3");
 const slideSound = new Audio("assets/audio/slide.mp3");
 
-// Select random image for initial board
+// === Globals ===
+let isSolving = false;
+let run = [];
 let selectedImage = getRandomImage();
 let board = new Board(DEFAULT_SIZE, selectedImage);
 
-// Get a random puzzle image
+// === Utility Functions ===
 function getRandomImage() {
-  const index = Math.floor(Math.random() * IMAGES.length);
-  return IMAGES[index];
+  return IMAGES[Math.floor(Math.random() * IMAGES.length)];
 }
 
-// Play button click sound
 function playClick() {
   clickSound.currentTime = 0;
   clickSound.play();
 }
 
-// Play tile slide sound
 function playSlide() {
   slideSound.currentTime = 0;
   slideSound.play();
 }
 
-// Update and reset board
-function updateBoard() {
-  $(".board").empty();
-
-  const size = $("#size").val();
-  selectedImage = getRandomImage();
-  board = new Board(size, selectedImage);
-
-  checkNumberToggle();
+function clearAllAnimation() {
+  run.forEach((t) => clearTimeout(t));
+  isSolving = false;
 }
 
-// Show or hide tile numbers
 function checkNumberToggle() {
   const visible = $("#checkbox").is(":checked");
   $(".number").css("visibility", visible ? "visible" : "hidden");
 }
 
-// Clear ongoing animation and AI solving
-function clearAllAnimation() {
-  run?.forEach((el) => clearTimeout(el));
-  isSolving = false;
+// === Result Popup ===
+function showResultPopup(moves, size) {
+  let rank;
+
+  if (moves <= size * 2) rank = "🔥 Blazing Fast";
+  else if (moves <= size * 4) rank = "💨 Smooth Solver";
+  else if (moves <= size * 6) rank = "♨️ Warm Ember";
+  else rank = "❄️ Cold Ash";
+
+  $("#finalMoves").text(moves);
+  $("#rankLabel").text(rank);
+  $("#completionModal").fadeIn();
+
+  $("#shareBtn").off("click").on("click", () => {
+    const message = `I just solved a ${size}x${size} Fogo Puzzle in ${moves} moves! Rank: ${rank} 🔥 Try it: https://your-site-url.com — by @bytrizz404`;
+    const intent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(message)}`;
+    window.open(intent, "_blank");
+  });
+
+  $("#playAgainBtn").off("click").on("click", () => {
+    $("#completionModal").fadeOut();
+    $(".move span").text(0);
+    updateBoard();
+  });
 }
 
-// Toggle number visibility
+// === Update Board ===
+function updateBoard() {
+  $(".board").empty();
+  const size = $("#size").val();
+  selectedImage = getRandomImage();
+  board = new Board(size, selectedImage);
+  checkNumberToggle();
+}
+
+// === Event Listeners ===
 $("#checkbox").on("click", () => {
   playClick();
   checkNumberToggle();
 });
 
-// Shuffle button logic
 $("#shuffle-btn").on("click", () => {
   playClick();
   $(".move span").text(0);
@@ -74,7 +93,6 @@ $("#shuffle-btn").on("click", () => {
   board.start();
 });
 
-// Solve button logic
 $("#solve-btn").on("click", () => {
   playClick();
 
@@ -82,32 +100,31 @@ $("#solve-btn").on("click", () => {
 
   const solver = new Solver(board);
   const path = solver.solveAStar();
-  const states = path.path_states;
+  const states = path?.path_states;
+
+  if (!states) return;
 
   isSolving = true;
 
   states.forEach((state, index) => {
-    setTimeout(() => {
+    run.push(setTimeout(() => {
       board.state = state;
       board.placeTiles();
-
       if (index !== 0) playSlide();
       if (index === states.length - 1) isSolving = false;
-    }, 300 * index);
+    }, 300 * index));
   });
 });
 
-// Resize listener for responsive board size
+// === Window Events ===
 window.addEventListener("resize", () => {
   DEFAULT_BOARD_SIZE = window.innerWidth < 550 ? window.innerWidth - 50 : 500;
-
-  $(".board").css({
-    width: DEFAULT_BOARD_SIZE + "px",
-    height: DEFAULT_BOARD_SIZE + "px"
-  });
-
+  $(".board").css({ width: `${DEFAULT_BOARD_SIZE}px`, height: `${DEFAULT_BOARD_SIZE}px` });
   updateBoard();
 });
 
-// Initialize board on load
-window.addEventListener("load", updateBoard);
+window.addEventListener("load", () => {
+  DEFAULT_BOARD_SIZE = window.innerWidth < 550 ? window.innerWidth - 50 : 500;
+  $(".board").css({ width: `${DEFAULT_BOARD_SIZE}px`, height: `${DEFAULT_BOARD_SIZE}px` });
+  updateBoard();
+});
