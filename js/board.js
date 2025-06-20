@@ -1,19 +1,17 @@
 class Board {
   constructor(size = 3) {
     this.size = size;
-    this.img = `assets/images/fogo${Math.floor(Math.random() * 5) + 1}.png`;
     this.tiles_size = 500 / size;
     this.state = [];
     this.goal_state = [];
     this.moves = 0;
     this.solved = false;
-    this.isAI = false;
     this.createBoard();
     setTimeout(() => this.shuffle(), 500);
   }
 
   createBoard() {
-    const board = $(".board").empty().css("border-radius", "12px");
+    const board = $(".board").empty();
     let number = 1;
     for (let row = 0; row < this.size; row++) {
       let row_goal = [];
@@ -35,12 +33,9 @@ class Board {
       css: {
         width: `${this.tiles_size}px`,
         height: `${this.tiles_size}px`,
-        position: "absolute",
         left: `${col * this.tiles_size}px`,
         top: `${row * this.tiles_size}px`,
-        background: number !== 0
-          ? `url("${this.img}") -${col * this.tiles_size}px -${row * this.tiles_size}px / 500px 500px no-repeat`
-          : "",
+        background: number !== 0 ? "#ff3300" : "",
         opacity: number === 0 ? "0" : "1"
       },
       click: () => this.moveTile(number)
@@ -56,7 +51,7 @@ class Board {
       this.moves++;
       $(".move-counter span").text(this.moves);
       this.updateBoard();
-      if (this.checkWin() && !this.isAI) this.showResultPopup();
+      if (this.checkWin() && this.moves > 1) this.showResultPopup();
     }
   }
 
@@ -94,7 +89,14 @@ class Board {
     $(".move-counter span").text("0");
     this.updateBoard();
     this.solved = false;
-    this.isAI = false;
+  }
+
+  solve() {
+    this.state = JSON.parse(JSON.stringify(this.goal_state));
+    this.updateBoard();
+    this.moves++;
+    $(".move-counter span").text(this.moves);
+    this.solved = true;
   }
 
   checkWin() {
@@ -102,45 +104,6 @@ class Board {
   }
 
   showResultPopup() {
-    this.solved = true;
-    const moves = this.moves;
-    let roast = "";
-    let title = "";
-
-    if (moves <= 20) {
-      roast = "You're built different.";
-      title = "🔥 Flame God";
-    } else if (moves <= 35) {
-      roast = "Efficient and clean.";
-      title = "🔥 Ember Expert";
-    } else if (moves <= 50) {
-      roast = "Took your time, but made it.";
-      title = "🔥 Warm Ash";
-    } else {
-      roast = "How did you even make it?";
-      title = "🔥 Lost in the Smoke";
-    }
-
-    const msg = `I solved the Fogo Puzzle in ${moves} moves and earned the title: "${title}". ${roast}`;
-    const shareIntent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}&url=${encodeURIComponent("https://fogopuzzle.vercel.app")}&via=bytrizz404`;
-
-    $("body").append(`
-      <div class="popup-overlay">
-        <div class="popup">
-          <h2>Congratulations!</h2>
-          <p>You completed the puzzle in <strong>${moves} moves</strong>.</p>
-          <p>${roast}</p>
-          <p><em>Title Earned:</em> <strong>${title}</strong></p>
-          <a href="${shareIntent}" class="share-btn" target="_blank">Share on X</a>
-          <button class="close-btn" onclick="location.reload()">Play Again</button>
-        </div>
-      </div>
-    `);
-  }
-
-  solveWithAI() {
-    this.isAI = true;
-    const solver = new Solver(this);
-    solver.solveAI();
+    alert("🔥 Puzzle completed! Well done.");
   }
 }
