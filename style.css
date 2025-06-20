@@ -1,0 +1,37 @@
+
+body {
+  margin: 0;
+  font-family: sans-serif;
+  background: #fff;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.board {
+  position: relative;
+  margin-top: 80px;
+}
+.tile {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 24px;
+  font-weight: bold;
+}
+.controls {
+  margin-top: 20px;
+}
+.sound-toggle {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 14px;
+  z-index: 10;
+  background: rgba(255, 255, 255, 0.8);
+  padding: 6px 10px;
+  border-radius: 5px;
+  user-select: none;
+}
+.sound-toggle input {
+  margin-left: 6px;
+}

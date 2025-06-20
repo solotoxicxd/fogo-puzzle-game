@@ -1,0 +1,1 @@
+// BoardState class placeholder

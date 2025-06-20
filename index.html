@@ -1,0 +1,26 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fogo Puzzle</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <div class="sound-toggle">
+    <label>🔈 Sound <input type="checkbox" id="sound-toggle" checked /></label>
+  </div>
+  <div class="board"></div>
+  <div class="controls">
+    <button id="shuffle-btn">Shuffle</button>
+    <button id="solve-btn">Solve</button>
+  </div>
+  <div class="move">Moves: <span>0</span></div>
+  <script src="FastPriorityQueue.js"></script>
+  <script src="boardstate.js"></script>
+  <script src="solver.js"></script>
+  <script src="board.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>
