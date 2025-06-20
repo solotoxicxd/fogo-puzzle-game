@@ -4,34 +4,46 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fogo Puzzle</title>
-
-  <!-- ✅ Styles -->
   <link rel="stylesheet" href="style.css" />
-
-  <!-- ✅ jQuery (required for Board.js) -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
+  <header>
+    <h1>🔥 Think you're fast? Challenge the flames. Solve it. Or get roasted!</h1>
+    <button id="start-btn" class="start-btn">Start Puzzle</button>
+  </header>
 
-  <!-- 🔊 Sound Toggle -->
   <div class="sound-toggle">
-    <label for="sound-toggle">🔈 Sound</label>
-    <input type="checkbox" id="sound-toggle" checked />
+    <label>🔊 Sound: <input type="checkbox" id="sound-toggle" checked /></label>
   </div>
 
-  <!-- 🧩 Puzzle Board -->
-  <div class="board"></div>
+  <main>
+    <div class="board-container hidden">
+      <div class="board"></div>
+      <div class="controls">
+        <button id="shuffle-btn">🔀 Shuffle</button>
+        <button id="solve-btn">🤖 Solve</button>
+      </div>
+      <div class="move">Moves: <span>0</span></div>
+    </div>
+  </main>
 
-  <!-- 🎮 Controls -->
-  <div class="controls">
-    <button id="shuffle-btn">🔀 Shuffle</button>
-    <button id="solve-btn">🤖 Solve</button>
+  <div id="end-modal" class="modal hidden">
+    <div class="modal-content">
+      <h2 id="end-title">🔥 </h2>
+      <p id="end-roast"></p>
+      <p>Moves: <span id="end-moves"></span></p>
+      <p>Rank: <strong id="end-rank"></strong></p>
+      <button id="share-btn">Share on X 🔁</button>
+      <button id="play-again">Play Again</button>
+    </div>
   </div>
 
-  <!-- 📊 Move Counter -->
-  <div class="move">Moves: <span>0</span></div>
+  <footer>
+    Made with ❤️‍🔥 by <a href="https://x.com/bytrizz404" target="_blank">@bytrizz404</a> | Discord: trizz404
+  </footer>
 
-  <!-- 🔗 Scripts (Order matters!) -->
+  <!-- Scripts -->
   <script src="js/FastPriorityQueue.js"></script>
   <script src="js/boardstate.js"></script>
   <script src="js/solver.js"></script>
