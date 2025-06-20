@@ -6,64 +6,50 @@ body {
   font-family: 'Ubuntu', sans-serif;
   background-color: #121212;
   color: white;
-}
-
-.container {
   display: flex;
   flex-direction: column;
+  align-items: center;
   min-height: 100vh;
 }
 
-.sidebar {
-  background: #1f1f1f;
-  padding: 20px;
-  max-width: 280px;
-  width: 100%;
-  box-shadow: 2px 0 10px rgba(255, 87, 34, 0.15);
-  border-right: 1px solid #2b2b2b;
-}
-
-.sidebar h2 {
-  margin-top: 0;
-  font-size: 1.4rem;
+h1.title {
+  margin: 20px 0 10px;
+  font-size: 2.4rem;
   color: #ff7043;
-}
-
-.controls {
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-  margin-top: 20px;
+  text-align: center;
 }
 
 .board-container {
-  flex: 1;
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 40px;
+  padding: 20px;
 }
 
 .board {
-  width: 500px;
-  height: 500px;
-  max-width: 90vw;
-  max-height: 90vw;
+  width: 90vmin;
+  height: 90vmin;
+  max-width: 500px;
+  max-height: 500px;
   position: relative;
   border: 4px solid #ff5722;
-  border-radius: 14px;
-  box-shadow: 0 0 30px #ff572255;
-  background: #111;
+  border-radius: 16px;
+  background-color: #111;
+  box-shadow: 0 0 25px #ff572240;
 }
 
 .tile {
   position: absolute;
-  display: grid;
-  place-items: center;
-  border-radius: 8px;
+  border-radius: 12px;
   transition: top 0.3s ease, left 0.3s ease;
-  overflow: hidden;
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+  overflow: hidden;
+}
+
+.tile img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
 }
 
 .tile .number {
@@ -72,6 +58,14 @@ body {
   color: #fff;
   text-shadow: 0 1px 4px rgba(0, 0, 0, 0.9);
   visibility: hidden;
+}
+
+/* Number toggle */
+.number-switch {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
 }
 
 .switch {
@@ -119,10 +113,36 @@ input:checked + .slider:before {
   transform: translateX(22px);
 }
 
-.button {
+/* Controls below puzzle */
+.controls {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  margin: 20px 0;
+  width: 90%;
+  max-width: 500px;
+}
+
+.controls select {
+  padding: 6px 10px;
+  background: #1e1e1e;
+  border: 1px solid #333;
+  color: #fff;
+  border-radius: 6px;
+  font-size: 1rem;
+}
+
+.button-group {
+  display: flex;
+  gap: 12px;
+  justify-content: center;
+  flex-wrap: wrap;
   width: 100%;
-  padding: 10px;
-  margin-top: 10px;
+}
+
+.button {
+  padding: 10px 16px;
   font-size: 1rem;
   background: #ff5722;
   border: none;
@@ -130,25 +150,65 @@ input:checked + .slider:before {
   color: white;
   cursor: pointer;
   transition: background 0.3s ease;
+  min-width: 120px;
 }
 
 .button:hover {
   background: #e64a19;
 }
 
-.button.large {
+.move-display {
+  font-weight: bold;
   font-size: 1.2rem;
-  padding: 14px 20px;
+  color: #ffa270;
+  margin-top: 5px;
 }
 
-.move {
-  background: #333;
-  padding: 6px 10px;
-  border-radius: 6px;
-  font-weight: bold;
-  margin-left: 12px;
-  color: #ffa270;
-  box-shadow: inset 0 0 5px rgba(255, 87, 34, 0.3);
+/* Modal Popup */
+.modal {
+  position: fixed;
+  display: none;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(18, 18, 18, 0.95);
+  justify-content: center;
+  align-items: center;
+  z-index: 999;
+}
+
+.modal.show {
+  display: flex;
+}
+
+.modal-content {
+  background: #1c1c1c;
+  padding: 30px 24px;
+  border-radius: 14px;
+  text-align: center;
+  max-width: 400px;
+  box-shadow: 0 0 20px rgba(255, 87, 34, 0.5);
+  animation: popup 0.3s ease-in-out;
+}
+
+@keyframes popup {
+  from {
+    opacity: 0;
+    transform: scale(0.9);
+  } to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.modal-content h2 {
+  color: #ff7043;
+  margin-bottom: 10px;
+}
+
+.modal-content p {
+  margin: 10px 0;
 }
 
 footer {
@@ -159,13 +219,9 @@ footer {
   color: #aaa;
   border-top: 1px solid #222;
   background: #1a1a1a;
+  width: 100%;
 }
 
-footer a {
+footer strong {
   color: #ff5722;
-  text-decoration: none;
-}
-
-footer a:hover {
-  text-decoration: underline;
 }
