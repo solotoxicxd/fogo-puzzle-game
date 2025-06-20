@@ -3,12 +3,18 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  
   <title>Fogo Puzzle</title>
+
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
 </head>
+
 <body>
   <div class="container">
-    <div class="sidebar">
+
+    <!-- Sidebar Controls -->
+    <aside class="sidebar">
       <table>
         <tr>
           <td class="move-display">
@@ -16,6 +22,7 @@
             <div class="move"><span>0</span></div>
           </td>
         </tr>
+
         <tr>
           <td>
             <div class="size-picker">
@@ -29,6 +36,7 @@
             </div>
           </td>
         </tr>
+
         <tr>
           <td>
             <div class="number-switch">
@@ -40,23 +48,37 @@
             </div>
           </td>
         </tr>
+
         <tr>
-          <td><button id="shuffle-btn" class="button">Shuffle</button></td>
+          <td>
+            <button id="shuffle-btn" class="button">Shuffle</button>
+          </td>
         </tr>
+
         <tr>
-          <td><button id="solve-btn" class="button">Solve</button></td>
+          <td>
+            <button id="solve-btn" class="button">Solve</button>
+          </td>
         </tr>
       </table>
-    </div>
-    <div class="board-container">
+    </aside>
+
+    <!-- Puzzle Board -->
+    <main class="board-container">
       <div class="board" id="board"></div>
-    </div>
+    </main>
   </div>
 
+  <!-- Footer -->
   <footer>
     Made with ❤️‍🔥 by <strong>@bytrizz404</strong> • Discord: <strong>bytrizz404</strong>
   </footer>
 
+  <!-- Audio Files -->
+  <audio id="click-sound" src="assets/audio/click.mp3" preload="auto"></audio>
+  <audio id="slide-sound" src="assets/audio/slide.mp3" preload="auto"></audio>
+
+  <!-- Scripts -->
   <script src="FastPriorityQueue.js"></script>
   <script src="boardstate.js"></script>
   <script src="solver.js"></script>
