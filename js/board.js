@@ -1,6 +1,7 @@
 const DEFAULT_SIZE = 3;
-const DEFAULT_IMAGE = `assets/images/fogo${Math.floor(Math.random() * 5) + 1}.png`;
+const DEFAULT_IMAGE = ""; // Will be set randomly in start()
 let DEFAULT_BOARD_SIZE = 500;
+
 
 class Board {
   constructor(size = DEFAULT_SIZE, image = DEFAULT_IMAGE) {
