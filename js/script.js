@@ -14,6 +14,7 @@ const solveButton = document.getElementById("solve-btn");
 if (solveButton) {
   solveButton.addEventListener("click", () => {
     try {
+      board.isAI = true; // Mark as AI-initiated so no popup/rank shown
       const solver = new Solver(board);
       solver.solveAI();
     } catch (error) {
