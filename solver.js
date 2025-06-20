@@ -3,46 +3,50 @@ class Solver {
     this.state = boardInstance.state;
     this.goal_state = boardInstance.goal_state;
     this.size = boardInstance.size;
-    this.queue = new FastPriorityQueue(function (a, b) {
-      return a.value < b.value;
-    });
+
+    this.queue = new FastPriorityQueue((a, b) => a.value < b.value);
     this.visited = new Set();
     this.limit = 100000;
-    this.test = new Map();
+
+    this.test = new Map(); // For internal debugging or analysis
   }
 
+  // Deep clone a board state
   clone(state) {
     return JSON.parse(JSON.stringify(state));
   }
 
+  // Expand all possible valid moves from current state
   expand(current_state) {
-    this.test.set(
-      current_state.state.flat().toString(),
-      (this.test.get(current_state.state.flat().toString()) ?? 0) + 1
-    );
+    const flatKey = current_state.state.flat().toString();
+    this.test.set(flatKey, (this.test.get(flatKey) ?? 0) + 1);
 
-    let new_state = null;
-    let state = current_state.state;
-    let row = current_state.empty_tile_row;
-    let col = current_state.empty_tile_col;
+    const state = current_state.state;
+    const row = current_state.empty_tile_row;
+    const col = current_state.empty_tile_col;
 
     const directions = [
-      { dr: -1, dc: 0, dir: "U" },
-      { dr: 1, dc: 0, dir: "D" },
-      { dr: 0, dc: -1, dir: "L" },
-      { dr: 0, dc: 1, dir: "R" }
+      { dr: -1, dc: 0, dir: "U" }, // Up
+      { dr: 1, dc: 0, dir: "D" },  // Down
+      { dr: 0, dc: -1, dir: "L" }, // Left
+      { dr: 0, dc: 1, dir: "R" }   // Right
     ];
 
     for (let { dr, dc, dir } of directions) {
       const newRow = row + dr;
       const newCol = col + dc;
-      if (newRow >= 0 && newRow < this.size && newCol >= 0 && newCol < this.size) {
-        new_state = this.clone(state);
-        let temp = new_state[newRow][newCol];
-        new_state[newRow][newCol] = 0;
-        new_state[row][col] = temp;
-        if (!this.visited.has(new_state.flat().toString())) {
-          let new_board_state = new BoardState(
+
+      if (this.isInsideBoard(newRow, newCol)) {
+        const new_state = this.clone(state);
+
+        // Swap empty tile with the target tile
+        [new_state[row][col], new_state[newRow][newCol]] = [
+          new_state[newRow][newCol], 0
+        ];
+
+        const newFlat = new_state.flat().toString();
+        if (!this.visited.has(newFlat)) {
+          const newBoardState = new BoardState(
             new_state,
             this.goal_state,
             this.size,
@@ -50,15 +54,22 @@ class Solver {
             current_state.path_states,
             current_state.depth + 1
           );
-          this.queue.add(new_board_state);
+
+          this.queue.add(newBoardState);
           this.limit -= 1;
         }
       }
     }
   }
 
+  // Check if the coordinates are within the board
+  isInsideBoard(row, col) {
+    return row >= 0 && row < this.size && col >= 0 && col < this.size;
+  }
+
+  // A* solving function
   solveAStar() {
-    let init_state = new BoardState(
+    const init_state = new BoardState(
       this.state,
       this.goal_state,
       this.size,
@@ -68,15 +79,17 @@ class Solver {
     );
 
     this.queue.add(init_state);
+
     while (!this.queue.isEmpty() && this.limit > 0) {
-      let current_state = this.queue.poll();
-      this.visited.add(current_state.state.flat().toString());
-      if (
-        current_state.state.flat().toString() ===
-        this.goal_state.flat().toString()
-      ) {
+      const current_state = this.queue.poll();
+      const flatState = current_state.state.flat().toString();
+
+      this.visited.add(flatState);
+
+      if (flatState === this.goal_state.flat().toString()) {
         return current_state;
       }
+
       this.expand(current_state);
     }
   }
