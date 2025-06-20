@@ -1,4 +1,3 @@
-
 class Board {
   constructor(size = 3) {
     this.size = size;
@@ -6,9 +5,8 @@ class Board {
     this.tiles_size = 500 / size;
     this.state = [];
     this.goal_state = [];
-    this.started = false;
-    this.solved = false;
     this.moves = 0;
+    this.solved = false;
     this.createBoard();
     setTimeout(() => this.shuffle(), 500);
   }
@@ -52,7 +50,10 @@ class Board {
     if ((Math.abs(r1 - r0) + Math.abs(c1 - c0)) === 1) {
       this.state[r0][c0] = number;
       this.state[r1][c1] = 0;
+      this.moves++;
+      $(".move-counter span").text(this.moves);
       this.updateBoard();
+      if (this.checkWin()) this.showResultPopup();
     }
   }
 
@@ -86,6 +87,51 @@ class Board {
     for (let i = 0; i < flat.length; i += this.size) {
       this.state.push(flat.slice(i, i + this.size));
     }
+    this.moves = 0;
+    $(".move-counter span").text("0");
     this.updateBoard();
+    this.solved = false;
+  }
+
+  checkWin() {
+    return this.state.flat().join() === this.goal_state.flat().join();
+  }
+
+  showResultPopup() {
+    this.solved = true;
+    const moves = this.moves;
+    let roast = "";
+    let title = "";
+
+    if (moves <= 20) {
+      roast = "You're built different.";
+      title = "🔥 Flame God";
+    } else if (moves <= 35) {
+      roast = "Efficient and clean.";
+      title = "🔥 Ember Expert";
+    } else if (moves <= 50) {
+      roast = "Took your time, but made it.";
+      title = "🔥 Warm Ash";
+    } else {
+      roast = "How did you even make it?";
+      title = "🔥 Lost in the Smoke";
+    }
+
+    const msg = `I solved the Fogo Puzzle in ${moves} moves and earned the title: "${title}". ${roast}`;
+
+    const shareIntent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}&url=${encodeURIComponent("https://fogopuzzle.vercel.app")}&via=bytrizz404`;
+
+    $("body").append(`
+      <div class="popup-overlay">
+        <div class="popup">
+          <h2>Congratulations!</h2>
+          <p>You completed the puzzle in <strong>${moves} moves</strong>.</p>
+          <p>${roast}</p>
+          <p><em>Title Earned:</em> <strong>${title}</strong></p>
+          <a href="${shareIntent}" class="share-btn" target="_blank">Share on X</a>
+          <button class="close-btn" onclick="location.reload()">Play Again</button>
+        </div>
+      </div>
+    `);
   }
 }
