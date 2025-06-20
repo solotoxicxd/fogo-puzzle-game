@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Fogo Puzzle</title>
+  <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Ubuntu&display=swap" rel="stylesheet"/>
+</head>
+<body>
+  <div class="container">
+    <div class="sidebar">
+      <table style="margin: auto;">
+        <tbody>
+          <tr>
+            <td>
+              <div style="display: flex; justify-content: space-around; align-items: center;">
+                <p>Moves:</p>
+                <div class="move"><span>0</span></div>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div style="display: flex; justify-content: space-around; align-items: center;">
+                <label for="size">Size:</label>
+                <select id="size" name="size" style="padding: 6px 10px;">
+                  <option value="2">2</option>
+                  <option value="3" selected>3</option>
+                  <option value="4">4</option>
+                  <option value="5">5</option>
+                </select>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <div class="number-switch">
+                <p>Numbers</p>
+                <label class="switch" for="checkbox">
+                  <input type="checkbox" id="checkbox">
+                  <span class="slider round"></span>
+                </label>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <td><button id="shuffle-btn" class="shuffle-btn button"><span>Shuffle</span></button></td>
+          </tr>
+          <tr>
+            <td><button id="solve-btn" class="solve-btn button"><span>Solve</span></button></td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="board-container">
+      <div id="board" class="board"></div>
+    </div>
+  </div>
+  <footer style="text-align:center; padding: 1rem; font-size: 0.9rem; color: #888;">
+    Made with ❤️‍🔥 by <strong>@bytrizz404</strong> · Discord: bytrizz
+  </footer>
+
+  <!-- Sounds -->
+  <audio id="click-sound" src="assets/audio/click.mp3" preload="auto"></audio>
+  <audio id="slide-sound" src="assets/audio/slide.mp3" preload="auto"></audio>
+
+  <!-- Scripts -->
+  <script src="FastPriorityQueue.js"></script>
+  <script src="boardstate.js"></script>
+  <script src="solver.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

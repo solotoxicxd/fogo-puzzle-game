@@ -1,0 +1,45 @@
+body {
+    margin: 0;
+    font-family: 'Ubuntu', sans-serif;
+    background-color: #1a1a1a;
+    color: white;
+}
+.board-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 90vh;
+}
+.board {
+    width: 500px;
+    height: 500px;
+    position: relative;
+    border: 5px solid #ff4500;
+}
+.tile {
+    position: absolute;
+    transition: 0.3s;
+    cursor: pointer;
+    border-radius: 8px;
+}
+.number {
+    visibility: hidden;
+    font-size: 2rem;
+    color: #fff;
+}
+.sidebar {
+    padding: 20px;
+    background: #333;
+}
+.button {
+    padding: 10px 20px;
+    background: #ff4500;
+    border: none;
+    color: white;
+    margin-top: 10px;
+    cursor: pointer;
+    border-radius: 6px;
+}
+.move span {
+    font-weight: bold;
+}
