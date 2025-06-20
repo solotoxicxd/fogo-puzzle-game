@@ -163,7 +163,7 @@ class Board {
           ? "🔥 Ember Adept"
           : "🌫️ Smoky Soul";
 
-      const intent = `https://x.com/intent/tweet?text=I completed the Fogo Puzzle in ${moves} moves! I earned the rank: "${rank}".%0A%0ACan you beat me? 🔥%0Ahttps://your-site-url.vercel.app/ %0Aby @bytrizz404`;
+      const intent = `https://x.com/intent/tweet?text=I completed the Fogo Puzzle in ${moves} moves! I earned the rank: "${rank}".%0A%0ACan you beat me? 🔥%0Ahttps://fogo-puzzle-game.vercel.app/ %0Aby @bytrizz404`;
 
       const popup = $(`
         <div class="popup">
