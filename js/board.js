@@ -1,5 +1,3 @@
-let wasSolvedUsingButton = false;
-
 class Board {
   constructor(size = 3) {
     this.size = size;
@@ -9,24 +7,20 @@ class Board {
     this.goal_state = [];
     this.moves = 0;
     this.solved = false;
-
-    this.clickSound = new Audio("assets/audio/click.mp3");
-    this.clickSound.volume = 0.6;
-
+    this.isAI = false;
     this.createBoard();
     setTimeout(() => this.shuffle(), 500);
   }
 
   createBoard() {
-    const board = $(".board").empty();
+    const board = $(".board").empty().css("border-radius", "12px");
     let number = 1;
     for (let row = 0; row < this.size; row++) {
       let row_goal = [];
       for (let col = 0; col < this.size; col++) {
         if (row === this.size - 1 && col === this.size - 1) number = 0;
         row_goal.push(number);
-        board.append(this.createTile(number, row, col));
-        number++;
+        board.append(this.createTile(number++, row, col));
       }
       this.goal_state.push(row_goal);
     }
@@ -37,6 +31,7 @@ class Board {
     return $("<div/>", {
       class: "tile",
       id: number,
+      html: "",
       css: {
         width: `${this.tiles_size}px`,
         height: `${this.tiles_size}px`,
@@ -53,8 +48,6 @@ class Board {
   }
 
   moveTile(number) {
-    if (this.solved || number === 0) return;
-
     const [r1, c1] = this.findTile(number);
     const [r0, c0] = this.findTile(0);
     if ((Math.abs(r1 - r0) + Math.abs(c1 - c0)) === 1) {
@@ -62,9 +55,8 @@ class Board {
       this.state[r1][c1] = 0;
       this.moves++;
       $(".move-counter span").text(this.moves);
-      this.clickSound.play();
       this.updateBoard();
-      if (this.checkWin()) this.showResultPopup();
+      if (this.checkWin() && !this.isAI) this.showResultPopup();
     }
   }
 
@@ -102,7 +94,7 @@ class Board {
     $(".move-counter span").text("0");
     this.updateBoard();
     this.solved = false;
-    wasSolvedUsingButton = false; // reset on shuffle
+    this.isAI = false;
   }
 
   checkWin() {
@@ -110,8 +102,6 @@ class Board {
   }
 
   showResultPopup() {
-    if (wasSolvedUsingButton) return;
-
     this.solved = true;
     const moves = this.moves;
     let roast = "";
@@ -119,19 +109,19 @@ class Board {
 
     if (moves <= 20) {
       roast = "You're built different.";
-      title = "Flame God";
+      title = "🔥 Flame God";
     } else if (moves <= 35) {
       roast = "Efficient and clean.";
-      title = "Ember Expert";
+      title = "🔥 Ember Expert";
     } else if (moves <= 50) {
       roast = "Took your time, but made it.";
-      title = "Warm Ash";
+      title = "🔥 Warm Ash";
     } else {
       roast = "How did you even make it?";
-      title = "Lost in the Smoke";
+      title = "🔥 Lost in the Smoke";
     }
 
-    const msg = `I solved the Fogo Puzzle in ${moves} moves and earned the title "${title}". ${roast}`;
+    const msg = `I solved the Fogo Puzzle in ${moves} moves and earned the title: "${title}". ${roast}`;
     const shareIntent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}&url=${encodeURIComponent("https://fogopuzzle.vercel.app")}&via=bytrizz404`;
 
     $("body").append(`
@@ -147,17 +137,10 @@ class Board {
       </div>
     `);
   }
+
+  solveWithAI() {
+    this.isAI = true;
+    const solver = new Solver(this);
+    solver.solveAI();
+  }
 }
-
-$(() => {
-  const board = new Board();
-
-  $("#shuffle-btn").on("click", () => {
-    board.shuffle();
-  });
-
-  $("#solve-btn").on("click", () => {
-    wasSolvedUsingButton = true;
-    alert("Solver AI is currently disabled for this version.");
-  });
-});
