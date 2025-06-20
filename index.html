@@ -11,62 +11,50 @@
 </head>
 
 <body>
-  <div class="container">
+  <h1 class="title">Fogo Puzzle</h1>
 
-    <!-- Sidebar Controls -->
-    <aside class="sidebar">
-      <table>
-        <tr>
-          <td class="move-display">
-            <span>Moves:</span>
-            <div class="move"><span>0</span></div>
-          </td>
-        </tr>
+  <!-- Puzzle Board -->
+  <div class="board-container">
+    <div class="board" id="board"></div>
+  </div>
 
-        <tr>
-          <td>
-            <div class="size-picker">
-              <label for="size">Size:</label>
-              <select id="size">
-                <option value="2">2</option>
-                <option value="3" selected>3</option>
-                <option value="4">4</option>
-                <option value="5">5</option>
-              </select>
-            </div>
-          </td>
-        </tr>
+  <!-- Controls below the board -->
+  <div class="controls">
+    <div class="move-display">Moves: <span class="move">0</span></div>
+    
+    <div class="size-picker">
+      <label for="size">Size:</label>
+      <select id="size">
+        <option value="2">2</option>
+        <option value="3" selected>3</option>
+        <option value="4">4</option>
+        <option value="5">5</option>
+      </select>
+    </div>
 
-        <tr>
-          <td>
-            <div class="number-switch">
-              <label>Numbers</label>
-              <label class="switch">
-                <input type="checkbox" id="checkbox" />
-                <span class="slider"></span>
-              </label>
-            </div>
-          </td>
-        </tr>
+    <div class="number-switch">
+      <label>Numbers</label>
+      <label class="switch">
+        <input type="checkbox" id="checkbox" />
+        <span class="slider"></span>
+      </label>
+    </div>
 
-        <tr>
-          <td>
-            <button id="shuffle-btn" class="button">Shuffle</button>
-          </td>
-        </tr>
+    <div class="button-group">
+      <button id="shuffle-btn" class="button">Shuffle</button>
+      <button id="solve-btn" class="button">Solve</button>
+    </div>
+  </div>
 
-        <tr>
-          <td>
-            <button id="solve-btn" class="button">Solve</button>
-          </td>
-        </tr>
-      </table>
-    </aside>
-
-    <!-- Puzzle Board -->
-    <main class="board-container">
-      <div class="board" id="board"></div>
-    </main>
+  <!-- Completion Modal -->
+  <div class="modal" id="completionModal">
+    <div class="modal-content">
+      <h2>🔥 Congratulations!</h2>
+      <p>You solved the puzzle in <span id="finalMoves"></span> moves.</p>
+      <p>Your rank: <strong id="rankLabel"></strong></p>
+      <button id="shareBtn" class="button">Share on X</button>
+      <button id="playAgainBtn" class="button">Play Again</button>
+    </div>
   </div>
 
   <!-- Footer -->
@@ -74,7 +62,7 @@
     Made with ❤️‍🔥 by <strong>@bytrizz404</strong> • Discord: <strong>bytrizz404</strong>
   </footer>
 
-  <!-- Audio Files -->
+  <!-- Audio -->
   <audio id="click-sound" src="assets/audio/click.mp3" preload="auto"></audio>
   <audio id="slide-sound" src="assets/audio/slide.mp3" preload="auto"></audio>
 
