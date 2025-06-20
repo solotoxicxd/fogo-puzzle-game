@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,48 +6,31 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>Fogo Puzzle</title>
   <link rel="stylesheet" href="style.css" />
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body>
-  <header>
-    <h1>🔥 Think you're fast? Challenge the flames. Solve it. Or get roasted!</h1>
-    <button id="start-btn" class="start-btn">Start Puzzle</button>
+  <header class="top-banner">
+    <h1>Think you're fast? Challenge the flames. Solve it. Or get roasted!</h1>
+    <button id="start-btn">Start Puzzle</button>
+    <div class="sound-toggle">
+      <label for="sound-toggle">Sound:</label>
+      <input type="checkbox" id="sound-toggle" checked />
+    </div>
   </header>
 
-  <div class="sound-toggle">
-    <label>🔊 Sound: <input type="checkbox" id="sound-toggle" checked /></label>
+  <div class="board-container">
+    <div class="board"></div>
   </div>
 
-  <main>
-    <div class="board-container hidden">
-      <div class="board"></div>
-      <div class="controls">
-        <button id="shuffle-btn">🔀 Shuffle</button>
-        <button id="solve-btn">🤖 Solve</button>
-      </div>
-      <div class="move">Moves: <span>0</span></div>
-    </div>
-  </main>
-
-  <div id="end-modal" class="modal hidden">
-    <div class="modal-content">
-      <h2 id="end-title">🔥 </h2>
-      <p id="end-roast"></p>
-      <p>Moves: <span id="end-moves"></span></p>
-      <p>Rank: <strong id="end-rank"></strong></p>
-      <button id="share-btn">Share on X 🔁</button>
-      <button id="play-again">Play Again</button>
-    </div>
+  <div class="controls">
+    <button id="shuffle-btn">🔀 Shuffle</button>
+    <button id="solve-btn">🧠 Solve</button>
   </div>
 
-  <footer>
-    Made with ❤️‍🔥 by <a href="https://x.com/bytrizz404" target="_blank">@bytrizz404</a> | Discord: bytrizz
+  <footer class="footer">
+    <p>Made with ❤️‍🔥 by <a href="https://x.com/bytrizz404" target="_blank">@bytrizz404</a> | Discord: bytrizz</p>
   </footer>
 
-  <!-- Scripts -->
-  <script src="js/FastPriorityQueue.js"></script>
-  <script src="js/boardstate.js"></script>
-  <script src="js/solver.js"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   <script src="js/board.js"></script>
   <script src="js/script.js"></script>
 </body>
