@@ -1,5 +1,5 @@
 const DEFAULT_SIZE = 3;
-let DEFAULT_IMAGE = "fogo1.jpg";
+const DEFAULT_IMAGE = `assets/images/fogo${Math.floor(Math.random() * 5) + 1}.png`;
 let DEFAULT_BOARD_SIZE = 500;
 
 class Board {
