@@ -1,7 +1,7 @@
-const board = new Board(3);
+const board = new Board(3); // Initializes and shuffles
 
 document.getElementById("shuffle-btn").addEventListener("click", () => {
-  board.start();
+  board.shuffle();
 });
 
 document.getElementById("solve-btn").addEventListener("click", () => {
