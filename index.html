@@ -10,62 +10,57 @@
   <div class="container">
     <div class="sidebar">
       <table>
-        <tbody>
-          <tr>
-            <td>
-              <div class="move-display">
-                <p>Moves:</p>
-                <div class="move"><span>0</span></div>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="size-picker">
-                <label for="size">Size:</label>
-                <select id="size">
-                  <option value="2">2</option>
-                  <option value="3" selected>3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              <div class="number-switch">
-                <p>Numbers</p>
-                <label class="switch" for="checkbox">
-                  <input type="checkbox" id="checkbox" />
-                  <span class="slider round"></span>
-                </label>
-              </div>
-            </td>
-          </tr>
-          <tr>
-            <td><button id="shuffle-btn" class="button">Shuffle</button></td>
-          </tr>
-          <tr>
-            <td><button id="solve-btn" class="button">Solve</button></td>
-          </tr>
-        </tbody>
+        <tr>
+          <td class="move-display">
+            <span>Moves:</span>
+            <div class="move"><span>0</span></div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="size-picker">
+              <label for="size">Size:</label>
+              <select id="size">
+                <option value="2">2</option>
+                <option value="3" selected>3</option>
+                <option value="4">4</option>
+                <option value="5">5</option>
+              </select>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td>
+            <div class="number-switch">
+              <label>Numbers</label>
+              <label class="switch">
+                <input type="checkbox" id="checkbox" />
+                <span class="slider"></span>
+              </label>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <td><button id="shuffle-btn" class="button">Shuffle</button></td>
+        </tr>
+        <tr>
+          <td><button id="solve-btn" class="button">Solve</button></td>
+        </tr>
       </table>
     </div>
-
     <div class="board-container">
-      <div id="board" class="board"></div>
+      <div class="board" id="board"></div>
     </div>
   </div>
 
   <footer>
-    Made with ❤️‍🔥 by <strong>@bytrizz404</strong> | Discord: trizz404
+    Made with ❤️‍🔥 by <strong>@bytrizz404</strong> • Discord: <strong>bytrizz404</strong>
   </footer>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
   <script src="FastPriorityQueue.js"></script>
   <script src="boardstate.js"></script>
   <script src="solver.js"></script>
+  <script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
   <script src="script.js"></script>
 </body>
 </html>
