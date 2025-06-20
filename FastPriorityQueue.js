@@ -1,152 +1,101 @@
-/**
- * FastPriorityQueue.js : a fast heap-based priority queue  in JavaScript.
- * (c) the authors
- * Licensed under the Apache License, Version 2.0.
- *
- * Speed-optimized heap-based priority queue for modern browsers and JavaScript engines.
- *
- * Usage :
-         Installation (in shell, if you use node):
-         $ npm install fastpriorityqueue
-
-         Running test program (in JavaScript):
-
-         // var FastPriorityQueue = require("fastpriorityqueue");// in node
-         var x = new FastPriorityQueue();
-         x.add(1);
-         x.add(0);
-         x.add(5);
-         x.add(4);
-         x.add(3);
-         x.peek(); // should return 0, leaves x unchanged
-         x.size; // should return 5, leaves x unchanged
-         while(!x.isEmpty()) {
-           console.log(x.poll());
-         } // will print 0 1 3 4 5
-         x.trim(); // (optional) optimizes memory usage
- */
 "use strict";
 
-var defaultcomparator = function (a, b) {
-  return a < b;
-};
+// Default comparator
+const defaultComparator = (a, b) => a < b;
 
 function FastPriorityQueue(comparator) {
-  if (!(this instanceof FastPriorityQueue))
-    return new FastPriorityQueue(comparator);
+  if (!(this instanceof FastPriorityQueue)) return new FastPriorityQueue(comparator);
   this.array = [];
   this.size = 0;
-  this.compare = comparator || defaultcomparator;
+  this.compare = comparator || defaultComparator;
 }
 
-// copy the priority queue into another, and return it. Queue items are shallow-copied.
-// Runs in `O(n)` time.
+// Clone the queue
 FastPriorityQueue.prototype.clone = function () {
-  var fpq = new FastPriorityQueue(this.compare);
+  const fpq = new FastPriorityQueue(this.compare);
   fpq.size = this.size;
   fpq.array = this.array.slice(0, this.size);
   return fpq;
 };
 
-// Add an element into the queue
-// runs in O(log n) time
-FastPriorityQueue.prototype.add = function (myval) {
-  var i = this.size;
-  this.array[this.size] = myval;
-  this.size += 1;
-  var p;
-  var ap;
+// Add an item
+FastPriorityQueue.prototype.add = function (val) {
+  let i = this.size++;
+  let p, ap;
+
   while (i > 0) {
     p = (i - 1) >> 1;
     ap = this.array[p];
-    if (!this.compare(myval, ap)) {
-      break;
-    }
+    if (!this.compare(val, ap)) break;
     this.array[i] = ap;
     i = p;
   }
-  this.array[i] = myval;
+
+  this.array[i] = val;
 };
 
-// replace the content of the heap by provided array and "heapify it"
+// Replace content with new array and heapify
 FastPriorityQueue.prototype.heapify = function (arr) {
   this.array = arr;
   this.size = arr.length;
-  var i;
-  for (i = this.size >> 1; i >= 0; i--) {
+  for (let i = this.size >> 1; i >= 0; i--) {
     this._percolateDown(i);
   }
 };
 
-// for internal use
+// Internal — percolate up
 FastPriorityQueue.prototype._percolateUp = function (i, force) {
-  var myval = this.array[i];
-  var p;
-  var ap;
+  const val = this.array[i];
+  let p, ap;
+
   while (i > 0) {
     p = (i - 1) >> 1;
     ap = this.array[p];
-    // force will skip the compare
-    if (!force && !this.compare(myval, ap)) {
-      break;
-    }
+    if (!force && !this.compare(val, ap)) break;
     this.array[i] = ap;
     i = p;
   }
-  this.array[i] = myval;
+
+  this.array[i] = val;
 };
 
-// for internal use
+// Internal — percolate down
 FastPriorityQueue.prototype._percolateDown = function (i) {
-  var size = this.size;
-  var hsize = this.size >>> 1;
-  var ai = this.array[i];
-  var l;
-  var r;
-  var bestc;
-  while (i < hsize) {
+  const size = this.size;
+  const half = size >>> 1;
+  const ai = this.array[i];
+  let l, r, best;
+
+  while (i < half) {
     l = (i << 1) + 1;
     r = l + 1;
-    bestc = this.array[l];
-    if (r < size) {
-      if (this.compare(this.array[r], bestc)) {
-        l = r;
-        bestc = this.array[r];
-      }
+    best = this.array[l];
+
+    if (r < size && this.compare(this.array[r], best)) {
+      l = r;
+      best = this.array[r];
     }
-    if (!this.compare(bestc, ai)) {
-      break;
-    }
-    this.array[i] = bestc;
+
+    if (!this.compare(best, ai)) break;
+
+    this.array[i] = best;
     i = l;
   }
+
   this.array[i] = ai;
 };
 
-// internal
-// _removeAt(index) will remove the item at the given index from the queue,
-// retaining balance. returns the removed item, or undefined if nothing is removed.
+// Internal — remove by index
 FastPriorityQueue.prototype._removeAt = function (index) {
-  if (index > this.size - 1 || index < 0) return undefined;
-
-  // impl1:
-  //this.array.splice(index, 1);
-  //this.heapify(this.array);
-  // impl2:
+  if (index < 0 || index >= this.size) return undefined;
   this._percolateUp(index, true);
   return this.poll();
 };
 
-// remove(myval) will remove an item matching the provided value from the
-// queue, checked for equality by using the queue's comparator.
-// return true if removed, false otherwise.
-FastPriorityQueue.prototype.remove = function (myval) {
-  for (var i = 0; i < this.size; i++) {
-    if (
-      !this.compare(this.array[i], myval) &&
-      !this.compare(myval, this.array[i])
-    ) {
-      // items match, comparator returns false both ways, remove item
+// Remove specific value
+FastPriorityQueue.prototype.remove = function (val) {
+  for (let i = 0; i < this.size; i++) {
+    if (!this.compare(this.array[i], val) && !this.compare(val, this.array[i])) {
       this._removeAt(i);
       return true;
     }
@@ -154,154 +103,105 @@ FastPriorityQueue.prototype.remove = function (myval) {
   return false;
 };
 
-// removeOne(callback) will execute the callback function for each item of the queue
-// and will remove the first item for which the callback will return true.
-// return the removed item, or undefined if nothing is removed.
+// Remove first matching value via callback
 FastPriorityQueue.prototype.removeOne = function (callback) {
-  if (typeof callback !== "function") {
-    return undefined;
-  }
-  for (var i = 0; i < this.size; i++) {
-    if (callback(this.array[i])) {
-      return this._removeAt(i);
-    }
+  if (typeof callback !== "function") return;
+  for (let i = 0; i < this.size; i++) {
+    if (callback(this.array[i])) return this._removeAt(i);
   }
 };
 
-// remove(callback[, limit]) will execute the callback function for each item of
-// the queue and will remove each item for which the callback returns true, up to
-// a max limit of removed items if specified or no limit if unspecified.
-// return an array containing the removed items.
-// The callback function should be a pure function.
+// Remove many via callback
 FastPriorityQueue.prototype.removeMany = function (callback, limit) {
-  // Skip unnecessary processing for edge cases
-  if (typeof callback !== "function" || this.size < 1) {
-    return [];
-  }
-  limit = limit ? Math.min(limit, this.size) : this.size;
+  if (typeof callback !== "function" || this.size < 1) return [];
 
-  // Prepare the results container to hold up to the results limit
-  var resultSize = 0;
-  var result = new Array(limit);
+  const max = limit ? Math.min(limit, this.size) : this.size;
+  const result = new Array(max);
+  let resultSize = 0;
+  const temp = [];
 
-  // Prepare a temporary array to hold items we'll traverse through and need to keep
-  var tmpSize = 0;
-  var tmp = new Array(this.size);
-
-  while (resultSize < limit && !this.isEmpty()) {
-    // Dequeue items into either the results or our temporary array
-    var item = this.poll();
+  while (resultSize < max && !this.isEmpty()) {
+    const item = this.poll();
     if (callback(item)) {
       result[resultSize++] = item;
     } else {
-      tmp[tmpSize++] = item;
+      temp.push(item);
     }
   }
-  // Update the result array with the exact number of results
-  result.length = resultSize;
 
-  // Re-add all the items we can keep
-  var i = 0;
-  while (i < tmpSize) {
-    this.add(tmp[i++]);
+  result.length = resultSize;
+  for (let i = 0; i < temp.length; i++) {
+    this.add(temp[i]);
   }
 
   return result;
 };
 
-// Look at the top of the queue (one of the smallest elements) without removing it
-// executes in constant time
-//
-// Calling peek on an empty priority queue returns
-// the "undefined" value.
-// https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/undefined
-//
+// Peek top
 FastPriorityQueue.prototype.peek = function () {
-  if (this.size == 0) return undefined;
-  return this.array[0];
+  return this.size === 0 ? undefined : this.array[0];
 };
 
-// remove the element on top of the heap (one of the smallest elements)
-// runs in logarithmic time
-//
-// If the priority queue is empty, the function returns the
-// "undefined" value.
-// https://developer.mozilla.org/en/docs/Web/JavaScript/Reference/Global_Objects/undefined
-//
-// For long-running and large priority queues, or priority queues
-// storing large objects, you may  want to call the trim function
-// at strategic times to recover allocated memory.
+// Poll (remove top)
 FastPriorityQueue.prototype.poll = function () {
-  if (this.size == 0) return undefined;
-  var ans = this.array[0];
+  if (this.size === 0) return undefined;
+
+  const top = this.array[0];
   if (this.size > 1) {
     this.array[0] = this.array[--this.size];
     this._percolateDown(0);
   } else {
-    this.size -= 1;
+    this.size--;
   }
-  return ans;
+
+  return top;
 };
 
-// This function adds the provided value to the heap, while removing
-// and returning one of the smallest elements (like poll). The size of the queue
-// thus remains unchanged.
-FastPriorityQueue.prototype.replaceTop = function (myval) {
-  if (this.size == 0) return undefined;
-  var ans = this.array[0];
-  this.array[0] = myval;
+// Replace top and return old
+FastPriorityQueue.prototype.replaceTop = function (val) {
+  if (this.size === 0) return undefined;
+  const top = this.array[0];
+  this.array[0] = val;
   this._percolateDown(0);
-  return ans;
+  return top;
 };
 
-// recover unused memory (for long-running priority queues)
+// Trim memory
 FastPriorityQueue.prototype.trim = function () {
   this.array = this.array.slice(0, this.size);
 };
 
-// Check whether the heap is empty
+// Check if empty
 FastPriorityQueue.prototype.isEmpty = function () {
   return this.size === 0;
 };
 
-// iterate over the items in order, pass a callback that receives (item, index) as args.
-// TODO once we transpile, uncomment
-// if (Symbol && Symbol.iterator) {
-//   FastPriorityQueue.prototype[Symbol.iterator] = function*() {
-//     if (this.isEmpty()) return;
-//     var fpq = this.clone();
-//     while (!fpq.isEmpty()) {
-//       yield fpq.poll();
-//     }
-//   };
-// }
+// ForEach
 FastPriorityQueue.prototype.forEach = function (callback) {
-  if (this.isEmpty() || typeof callback != "function") return;
-  var i = 0;
-  var fpq = this.clone();
-  while (!fpq.isEmpty()) {
-    callback(fpq.poll(), i++);
+  if (this.isEmpty() || typeof callback !== "function") return;
+  const clone = this.clone();
+  let i = 0;
+  while (!clone.isEmpty()) {
+    callback(clone.poll(), i++);
   }
 };
 
-// return the k 'smallest' elements of the queue as an array,
-// runs in O(k log k) time, the elements are not removed
-// from the priority queue.
+// Get k smallest
 FastPriorityQueue.prototype.kSmallest = function (k) {
-  if (this.size == 0 || k <= 0) return [];
+  if (this.size === 0 || k <= 0) return [];
   k = Math.min(this.size, k);
-  const newSize = Math.min(this.size, 2 ** (k - 1) + 1);
-  if (newSize < 2) {
-    return [this.peek()];
-  }
+
+  const limit = Math.min(this.size, 2 ** (k - 1) + 1);
+  if (limit < 2) return [this.peek()];
 
   const fpq = new FastPriorityQueue(this.compare);
-  fpq.size = newSize;
-  fpq.array = this.array.slice(0, newSize);
+  fpq.size = limit;
+  fpq.array = this.array.slice(0, limit);
 
-  const smallest = new Array(k);
+  const result = [];
   for (let i = 0; i < k; i++) {
-    smallest[i] = fpq.poll();
+    result.push(fpq.poll());
   }
-  return smallest;
+
+  return result;
 };
