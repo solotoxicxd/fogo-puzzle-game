@@ -1,5 +1,5 @@
 const DEFAULT_SIZE = 3;
-const DEFAULT_IMAGE = "pic.jpg";
+const DEFAULT_IMAGE = "fogo5.png";
 var DEFAULT_BOARD_SIZE = 500;
 
 class Board {
