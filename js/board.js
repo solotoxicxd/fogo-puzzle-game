@@ -1,12 +1,9 @@
 const DEFAULT_SIZE = 3;
-const DEFAULT_IMAGE = ""; // Will be set randomly in start()
 let DEFAULT_BOARD_SIZE = 500;
 
-
 class Board {
-  constructor(size = DEFAULT_SIZE, image = DEFAULT_IMAGE) {
+  constructor(size = DEFAULT_SIZE) {
     this.size = size;
-    this.img = image;
     this.board_size = DEFAULT_BOARD_SIZE;
     this.tiles_size = this.board_size / this.size;
     this.state = [];
@@ -17,26 +14,26 @@ class Board {
     this.solved = false;
     this.moves = 0;
     this.isAI = false;
-    this.start();
+    this.img = ""; // set randomly in start()
   }
 
   start() {
-  if (this.solved) return;
-  if (this.started) {
-    this.shuffle();
-    return;
-  }
+    if (this.solved) return;
+    if (this.started) {
+      this.shuffle();
+      return;
+    }
 
-  // 🔥 Set random image before creating the board
-  const images = ["fogo1.png", "fogo2.png", "fogo3.png", "fogo4.png", "fogo5.png"];
-  const randomIndex = Math.floor(Math.random() * images.length);
-  this.img = `assets/images/${images[randomIndex]}`;
+    // 🎨 Random fogo image
+    const images = ["fogo1.png", "fogo2.png", "fogo3.png", "fogo4.png", "fogo5.png"];
+    const randomIndex = Math.floor(Math.random() * images.length);
+    this.img = `assets/images/${images[randomIndex]}`;
 
-  this.createBoard();
-  setTimeout(() => this.shuffle(), 1000);
-  this.started = true;
+    $(".board").empty().css("visibility", "visible");
+    this.createBoard();
+    setTimeout(() => this.shuffle(), 600);
+    this.started = true;
   }
- 
 
   createBoard() {
     const board = $(".board");
@@ -56,21 +53,19 @@ class Board {
     return $("<div/>", {
       class: "tile",
       id: number,
-      html: `<p class="number">${number}</p>`,
+      html: number !== 0 ? `<p class="number">${number}</p>` : "",
       css: {
         position: "absolute",
         width: `${this.tiles_size}px`,
         height: `${this.tiles_size}px`,
-        scale: "0.99",
-        color: "black",
-        background: `url("${this.img}")`,
+        background: number === 0 ? "transparent" : `url('${this.img}')`,
         backgroundPosition: `-${col * this.tiles_size}px -${row * this.tiles_size}px`,
         backgroundSize: `${this.board_size}px ${this.board_size}px`,
         left: `${col * this.tiles_size}px`,
         top: `${row * this.tiles_size}px`,
         transition: ".3s",
         cursor: number === 0 ? "default" : "pointer",
-        opacity: number === 0 ? "0" : "1"
+        opacity: number === 0 ? 0 : 1
       },
       click: () => this.moveTile(number)
     });
@@ -101,7 +96,6 @@ class Board {
       $(".move span").text(this.moves);
       this.placeTiles();
 
-      // 🔊 Play sound if not AI and sound function exists
       if (!this.isAI && typeof playSound === "function") {
         playSound(slideSound);
       }
@@ -111,31 +105,47 @@ class Board {
   isSolved() {
     if (this.state.flat().toString() === this.goal_state.flat().toString()) {
       this.solved = true;
-      this.playAgainPrompt();
+      this.showVictoryModal();
       return true;
     }
     return false;
   }
 
-  playAgainPrompt() {
-    $(".tile").css({ scale: 1, cursor: "default" });
-    $("#0").css("opacity", 1);
-    $(".board").append(
-      $("<button/>", {
-        class: "button play-again large",
-        text: "Play Again",
-        css: {
-          position: "absolute",
-          left: "50%",
-          top: "50%",
-          transform: "translate(-50%,-50%)",
-        },
-        click: () => {
-          $(".move span").text(0);
-          updateBoard();
-        }
-      })
-    );
+  showVictoryModal() {
+    const moveCount = this.moves;
+    let roast = "", title = "";
+
+    if (moveCount <= 20) {
+      roast = "🔥 You’re too hot to handle!";
+      title = "Fire Master";
+    } else if (moveCount <= 35) {
+      roast = "🔥 Well played, smoky genius!";
+      title = "Blazing Mind";
+    } else if (moveCount <= 50) {
+      roast = "🔥 You survived the heat.";
+      title = "Ash Warrior";
+    } else {
+      roast = "💀 That was... mildly tragic.";
+      title = "Cold Ember";
+    }
+
+    const shareText = `I just solved the #FogoPuzzle in ${moveCount} moves 🧩
+Rank: ${title}
+${roast}
+🔥 Think you can beat me? Try: https://fogopuzzle.vercel.app
+— by @bytrizz404`;
+
+    const $modal = $(`
+      <div class="victory-modal">
+        <h2>🎉 Congratulations!</h2>
+        <p>You solved the puzzle in <strong>${moveCount}</strong> moves.</p>
+        <p>${roast}</p>
+        <p>🏆 Your Title: <strong>${title}</strong></p>
+        <button class="button x-share" onclick="window.open('https://twitter.com/intent/tweet?text=${encodeURIComponent(shareText)}','_blank')">📢 Share on X</button>
+        <button class="button" onclick="location.reload()">Play Again</button>
+      </div>
+    `);
+    $("body").append($modal);
   }
 
   findTilePos(number) {
@@ -165,7 +175,6 @@ class Board {
 
   shuffle() {
     let state = this.goal_state.flat();
-
     for (let i = state.length - 1; i > 0; i--) {
       const j = Math.floor(Math.random() * (i + 1));
       [state[i], state[j]] = [state[j], state[i]];
@@ -201,7 +210,6 @@ class Board {
     }
 
     if (this.size % 2 !== 0) return inv % 2 === 0;
-
     const blankRowFromBottom = this.size - this.empty_tile_row;
     return blankRowFromBottom % 2 === 0 ? inv % 2 !== 0 : inv % 2 === 0;
   }
