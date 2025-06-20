@@ -30,14 +30,16 @@ class Board {
     return $("<div/>", {
       class: "tile",
       id: number,
-      html: number ? number : "",
+      html: "", // No number visible
       css: {
         width: `${this.tiles_size}px`,
         height: `${this.tiles_size}px`,
         position: "absolute",
         left: `${col * this.tiles_size}px`,
         top: `${row * this.tiles_size}px`,
-        background: number !== 0 ? `url("${this.img}") -${col * this.tiles_size}px -${row * this.tiles_size}px / 500px 500px no-repeat` : "",
+        background: number !== 0
+          ? `url("${this.img}") -${col * this.tiles_size}px -${row * this.tiles_size}px / 500px 500px no-repeat`
+          : "",
         opacity: number === 0 ? "0" : "1"
       },
       click: () => this.moveTile(number)
@@ -45,6 +47,7 @@ class Board {
   }
 
   moveTile(number) {
+    if (this.solved) return;
     const [r1, c1] = this.findTile(number);
     const [r0, c0] = this.findTile(0);
     if ((Math.abs(r1 - r0) + Math.abs(c1 - c0)) === 1) {
@@ -54,6 +57,7 @@ class Board {
       $(".move-counter span").text(this.moves);
       this.updateBoard();
       if (this.checkWin()) this.showResultPopup();
+      if (typeof playSound === "function") playSound("click");
     }
   }
 
@@ -91,6 +95,7 @@ class Board {
     $(".move-counter span").text("0");
     this.updateBoard();
     this.solved = false;
+    if (typeof playSound === "function") playSound("shuffle");
   }
 
   checkWin() {
@@ -105,31 +110,30 @@ class Board {
 
     if (moves <= 20) {
       roast = "You're built different.";
-      title = "🔥 Flame God";
+      title = "Flame God";
     } else if (moves <= 35) {
       roast = "Efficient and clean.";
-      title = "🔥 Ember Expert";
+      title = "Ember Expert";
     } else if (moves <= 50) {
       roast = "Took your time, but made it.";
-      title = "🔥 Warm Ash";
+      title = "Warm Ash";
     } else {
       roast = "How did you even make it?";
-      title = "🔥 Lost in the Smoke";
+      title = "Lost in the Smoke";
     }
 
     const msg = `I solved the Fogo Puzzle in ${moves} moves and earned the title: "${title}". ${roast}`;
-
     const shareIntent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}&url=${encodeURIComponent("https://fogopuzzle.vercel.app")}&via=bytrizz404`;
 
     $("body").append(`
-      <div class="popup-overlay">
-        <div class="popup">
-          <h2>Congratulations!</h2>
-          <p>You completed the puzzle in <strong>${moves} moves</strong>.</p>
-          <p>${roast}</p>
-          <p><em>Title Earned:</em> <strong>${title}</strong></p>
-          <a href="${shareIntent}" class="share-btn" target="_blank">Share on X</a>
-          <button class="close-btn" onclick="location.reload()">Play Again</button>
+      <div class="end-popup">
+        <h2>Congratulations!</h2>
+        <p class="roast">${roast}</p>
+        <p>You solved it in <strong>${moves} moves</strong>.</p>
+        <p class="rank-title">Title: ${title}</p>
+        <div class="popup-buttons">
+          <a class="share-btn" href="${shareIntent}" target="_blank">Share on X</a>
+          <button class="play-again" onclick="location.reload()">Play Again</button>
         </div>
       </div>
     `);
