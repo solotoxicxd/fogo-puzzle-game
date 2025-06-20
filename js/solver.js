@@ -7,6 +7,7 @@ class Solver {
     this.visited = new Set();
     this.limit = 100000;
     this.test = new Map();
+    this.boardRef = boardInstance;
   }
 
   clone(state) {
@@ -76,7 +77,6 @@ class Solver {
     return null;
   }
 
-  // 🔥 Visual Solver
   solveAI() {
     if (this.size > 3) {
       alert("Solver only supports up to 3x3 boards for performance reasons.");
@@ -98,9 +98,8 @@ class Solver {
         clearInterval(interval);
         return;
       }
-      board.state = path[i];
-      board.placeTiles();
-      playSound(slideSound, 100); // 🎵 Add sound here
+      this.boardRef.state = path[i];
+      this.boardRef.updateBoard();
       i++;
     }, 300);
   }
