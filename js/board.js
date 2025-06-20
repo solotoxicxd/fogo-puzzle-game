@@ -7,6 +7,11 @@ class Board {
     this.goal_state = [];
     this.moves = 0;
     this.solved = false;
+
+    // Load sound
+    this.clickSound = new Audio("assets/audio/click.mp3");
+    this.clickSound.volume = 0.6;
+
     this.createBoard();
     setTimeout(() => this.shuffle(), 500);
   }
@@ -19,7 +24,8 @@ class Board {
       for (let col = 0; col < this.size; col++) {
         if (row === this.size - 1 && col === this.size - 1) number = 0;
         row_goal.push(number);
-        board.append(this.createTile(number++, row, col));
+        board.append(this.createTile(number, row, col));
+        number++;
       }
       this.goal_state.push(row_goal);
     }
@@ -30,7 +36,6 @@ class Board {
     return $("<div/>", {
       class: "tile",
       id: number,
-      html: "", // No number visible
       css: {
         width: `${this.tiles_size}px`,
         height: `${this.tiles_size}px`,
@@ -47,7 +52,8 @@ class Board {
   }
 
   moveTile(number) {
-    if (this.solved) return;
+    if (this.solved || number === 0) return;
+
     const [r1, c1] = this.findTile(number);
     const [r0, c0] = this.findTile(0);
     if ((Math.abs(r1 - r0) + Math.abs(c1 - c0)) === 1) {
@@ -55,9 +61,9 @@ class Board {
       this.state[r1][c1] = 0;
       this.moves++;
       $(".move-counter span").text(this.moves);
+      this.clickSound.play();
       this.updateBoard();
       if (this.checkWin()) this.showResultPopup();
-      if (typeof playSound === "function") playSound("click");
     }
   }
 
@@ -95,7 +101,6 @@ class Board {
     $(".move-counter span").text("0");
     this.updateBoard();
     this.solved = false;
-    if (typeof playSound === "function") playSound("shuffle");
   }
 
   checkWin() {
@@ -122,20 +127,32 @@ class Board {
       title = "Lost in the Smoke";
     }
 
-    const msg = `I solved the Fogo Puzzle in ${moves} moves and earned the title: "${title}". ${roast}`;
+    const msg = `I solved the Fogo Puzzle in ${moves} moves and earned the title "${title}". ${roast}`;
     const shareIntent = `https://twitter.com/intent/tweet?text=${encodeURIComponent(msg)}&url=${encodeURIComponent("https://fogopuzzle.vercel.app")}&via=bytrizz404`;
 
     $("body").append(`
-      <div class="end-popup">
-        <h2>Congratulations!</h2>
-        <p class="roast">${roast}</p>
-        <p>You solved it in <strong>${moves} moves</strong>.</p>
-        <p class="rank-title">Title: ${title}</p>
-        <div class="popup-buttons">
-          <a class="share-btn" href="${shareIntent}" target="_blank">Share on X</a>
-          <button class="play-again" onclick="location.reload()">Play Again</button>
+      <div class="popup-overlay">
+        <div class="popup">
+          <h2>Congratulations!</h2>
+          <p>You completed the puzzle in <strong>${moves} moves</strong>.</p>
+          <p>${roast}</p>
+          <p><em>Title Earned:</em> <strong>${title}</strong></p>
+          <a href="${shareIntent}" class="share-btn" target="_blank">Share on X</a>
+          <button class="close-btn" onclick="location.reload()">Play Again</button>
         </div>
       </div>
     `);
   }
 }
+
+$(() => {
+  const board = new Board();
+
+  $("#shuffle-btn").on("click", () => {
+    board.shuffle();
+  });
+
+  $("#solve-btn").on("click", () => {
+    alert("Solver AI is currently disabled for this version.");
+  });
+});
