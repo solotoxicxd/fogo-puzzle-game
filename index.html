@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -8,19 +7,30 @@
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
+
+  <!-- 🔊 Sound Toggle -->
   <div class="sound-toggle">
-    <label>🔈 Sound <input type="checkbox" id="sound-toggle" checked /></label>
+    <label for="sound-toggle">🔈 Sound</label>
+    <input type="checkbox" id="sound-toggle" checked />
   </div>
+
+  <!-- 🧩 Puzzle Board -->
   <div class="board"></div>
+
+  <!-- 🎮 Controls -->
   <div class="controls">
-    <button id="shuffle-btn">Shuffle</button>
-    <button id="solve-btn">Solve</button>
+    <button id="shuffle-btn">🔀 Shuffle</button>
+    <button id="solve-btn">🤖 Solve</button>
   </div>
+
+  <!-- 📊 Move Counter -->
   <div class="move">Moves: <span>0</span></div>
-  <script src="FastPriorityQueue.js"></script>
-  <script src="boardstate.js"></script>
-  <script src="solver.js"></script>
-  <script src="board.js"></script>
-  <script src="script.js"></script>
+
+  <!-- 🔗 Scripts -->
+  <script src="js/FastPriorityQueue.js"></script>
+  <script src="js/boardstate.js"></script>
+  <script src="js/solver.js"></script>
+  <script src="js/board.js"></script>
+  <script src="js/script.js"></script>
 </body>
 </html>
