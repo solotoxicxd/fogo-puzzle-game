@@ -1,3 +1,4 @@
+const DEFAULT_SIZE = 3;
 const DEFAULT_IMAGES = [
   "assets/images/fogo1.png",
   "assets/images/fogo2.png",
@@ -5,91 +6,90 @@ const DEFAULT_IMAGES = [
   "assets/images/fogo4.png",
   "assets/images/fogo5.png"
 ];
-let DEFAULT_IMAGE = DEFAULT_IMAGES[Math.floor(Math.random() * DEFAULT_IMAGES.length)];
-let DEFAULT_SIZE = 3;
-let DEFAULT_BOARD_SIZE = 500;
+const DEFAULT_AUDIO = {
+  click: new Audio("assets/audio/click.mp3"),
+  slide: new Audio("assets/audio/slide.mp3")
+};
 
-const CLICK_SOUND = document.getElementById("click-sound");
-const SLIDE_SOUND = document.getElementById("slide-sound");
+let board, url = getRandomImage(), size_el = $("#size"), checkbox_el = $("#checkbox");
+let DEFAULT_BOARD_SIZE = window.innerWidth > 550 ? 500 : window.innerWidth - 50;
 
-let board;
-let size_el = document.getElementById("size");
-let checkbox_el = document.getElementById("checkbox");
+// 🧠 Init on load
+$(document).ready(() => {
+  initBoard();
+});
 
-function check() {
-  if (checkbox_el.checked) {
-    document.querySelectorAll(".number").forEach(el => el.style.visibility = "visible");
-  } else {
-    document.querySelectorAll(".number").forEach(el => el.style.visibility = "hidden");
+// 🎲 Random image
+function getRandomImage() {
+  const randomIndex = Math.floor(Math.random() * DEFAULT_IMAGES.length);
+  return DEFAULT_IMAGES[randomIndex];
+}
+
+// 🔊 Play sound
+function playSound(type) {
+  const sound = DEFAULT_AUDIO[type];
+  if (sound) {
+    sound.currentTime = 0;
+    sound.play();
   }
 }
 
+// 🧩 Init board
+function initBoard() {
+  board = new Board(DEFAULT_SIZE, url);
+  board.start();
+  bindEvents();
+}
+
+// 🔄 Update board
 function updateBoard() {
-  document.querySelector(".board").innerHTML = "";
-  DEFAULT_IMAGE = DEFAULT_IMAGES[Math.floor(Math.random() * DEFAULT_IMAGES.length)];
-  const size = parseInt(size_el.value);
-  board = new Board(size, DEFAULT_IMAGE);
+  $(".board").empty();
+  url = getRandomImage();
+  let size = parseInt(size_el.val());
+  board = new Board(size, url);
   check();
-  document.getElementById("solve-btn").disabled = size > 3;
 }
 
-function clearAllAnimation() {
-  run?.forEach(el => clearTimeout(el));
-  isSolving = false;
+// ☑️ Number toggle
+checkbox_el.on("change", check);
+function check() {
+  const show = checkbox_el.is(":checked");
+  $(".number").css("visibility", show ? "visible" : "hidden");
 }
 
-document.getElementById("shuffle-btn").addEventListener("click", () => {
-  CLICK_SOUND.currentTime = 0;
-  CLICK_SOUND.play();
-  document.querySelector(".move span").textContent = "0";
-  clearAllAnimation();
-  if (isSolving) return;
+// 🔘 Shuffle
+$("#shuffle-btn").click(() => {
+  $(".move span").text(0);
+  playSound("click");
   board.start();
 });
 
-document.getElementById("solve-btn").addEventListener("click", () => {
-  CLICK_SOUND.currentTime = 0;
-  CLICK_SOUND.play();
-  if (board.state.length < 1 || isSolving || board.size > 3) return;
-  const init = new Solver(board);
-  let path = init.solveAStar();
+// 🧠 Solve (up to 3x3)
+$("#solve-btn").click(() => {
+  if (board.size > 3) return;
+  playSound("click");
+  const solver = new Solver(board);
+  const path = solver.solveAStar();
+  if (!path) return;
 
-  async function move() {
-    return new Promise(resolve => {
-      path.path_states.forEach((state, index) => {
-        run.push(setTimeout(() => {
-          board.state = state;
-          board.placeTiles();
-        }, 400 * index));
-      });
-      setTimeout(() => resolve("done"), path.path_states.length * 400);
-    });
+  let run = [], step = 0;
+  function animate() {
+    if (step >= path.path_states.length) return;
+    board.state = path.path_states[step];
+    board.placeTiles();
+    playSound("slide");
+    step++;
+    run.push(setTimeout(animate, 400));
   }
-
-  async function execute() {
-    isSolving = true;
-    await move();
-    isSolving = false;
-  }
-  execute();
+  animate();
 });
 
-size_el.addEventListener("change", updateBoard);
-checkbox_el.addEventListener("change", check);
-
-window.addEventListener("resize", updateBoardSize);
-window.addEventListener("load", () => {
-  updateBoardSize();
+// 🪟 Resize responsive
+$(window).on("resize", () => {
+  DEFAULT_BOARD_SIZE = window.innerWidth > 550 ? 500 : window.innerWidth - 50;
+  $(".board").css({
+    width: `${DEFAULT_BOARD_SIZE}px`,
+    height: `${DEFAULT_BOARD_SIZE}px`
+  });
   updateBoard();
 });
-
-function updateBoardSize() {
-  if (window.innerWidth > 550) {
-    DEFAULT_BOARD_SIZE = 500;
-  } else {
-    DEFAULT_BOARD_SIZE = window.innerWidth - 50;
-  }
-  const boardEl = document.querySelector(".board");
-  boardEl.style.height = `${DEFAULT_BOARD_SIZE}px`;
-  boardEl.style.width = `${DEFAULT_BOARD_SIZE}px`;
-}
