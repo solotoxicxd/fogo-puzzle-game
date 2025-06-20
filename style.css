@@ -1,110 +1,35 @@
-/* 🌐 Global Reset */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
+/* General */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+body { font-family: 'Ubuntu', sans-serif; background: #fef9f0; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
+a { color: #ff4500; text-decoration: none; }
 
-body {
-  font-family: 'Segoe UI', sans-serif;
-  background: #fffaf5;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  min-height: 100vh;
-  padding-top: 60px;
-}
+/* Header */
+header { text-align: center; padding: 2rem; }
+header h1 { font-size: 1.5rem; }
 
-/* 🧩 Puzzle Board */
-.board {
-  position: relative;
-  display: grid;
-  gap: 2px;
-  margin-top: 20px;
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-}
+/* Start button */
+.start-btn { padding: .8rem 1.6rem; background: #ff4500; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
 
-/* 🔳 Puzzle Tiles */
-.tile {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  font-weight: bold;
-  background-color: #fcd9b8;
-  border-radius: 4px;
-  cursor: pointer;
-  user-select: none;
-  transition: transform 0.2s ease, opacity 0.2s ease;
-  overflow: hidden;
-}
+/* Sound toggle */
+.sound-toggle { position: absolute; top: 1rem; right: 1rem; }
 
-/* 🎮 Control Buttons */
-.controls {
-  margin-top: 30px;
-  display: flex;
-  gap: 12px;
-}
+/* Puzzle area */
+.board-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
+.board { position: relative; border: 5px solid #ff4500; border-radius: 8px; background: #ddd; margin-bottom: 1rem; }
+.tile { position: absolute; border: 2px solid #fff; }
+.move { margin-top: .5rem; font-size: 1.1rem; }
 
-.controls button {
-  padding: 10px 16px;
-  font-size: 16px;
-  background-color: #ff7139;
-  border: none;
-  border-radius: 6px;
-  color: #fff;
-  cursor: pointer;
-  transition: background 0.2s ease;
-}
+/* Controls */
+.controls { display: flex; gap: .5rem; margin-bottom: 1rem; }
+.controls button { background: #ff4500; color: white; border: none; padding: .6rem 1.2rem; border-radius: 4px; cursor: pointer; }
 
-.controls button:hover {
-  background-color: #ff4400;
-}
+/* Modal */
+.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; }
+.modal-content { background: white; padding: 2rem; border-radius: 8px; text-align: center; }
+.modal-content button { padding: .6rem 1.2rem; margin: .5rem; background: #ff4500; color: white; border: none; border-radius: 4px; cursor: pointer; }
 
-/* 📈 Move Counter */
-.move {
-  margin-top: 12px;
-  font-size: 16px;
-  color: #333;
-}
+/* Footer */
+footer { text-align: center; padding: 1rem; background: #fff5e6; font-size: .9rem; }
 
-/* 🔈 Sound Toggle */
-.sound-toggle {
-  position: absolute;
-  top: 15px;
-  right: 15px;
-  font-size: 14px;
-  z-index: 10;
-  background: rgba(255, 255, 255, 0.85);
-  padding: 6px 10px;
-  border-radius: 6px;
-  user-select: none;
-  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
-}
-
-.sound-toggle input {
-  margin-left: 6px;
-}
-
-/* 📱 Responsive Layout */
-@media (max-width: 600px) {
-  .controls {
-    flex-direction: column;
-    gap: 10px;
-  }
-
-  .controls button {
-    width: 140px;
-  }
-
-  .tile {
-  border: 1px solid #fff;
-  box-sizing: border-box;
-  background-color: yellow;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 2rem;
-  font-weight: bold;
-  }
-}
+/* Hidden helper */
+.hidden { display: none; }
