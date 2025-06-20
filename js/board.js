@@ -25,12 +25,6 @@ class Board {
       this.shuffle();
       return;
     }
-
-    // Pick a random Fogo image for the puzzle
-    const images = ["fogo1.jpg", "fogo2.jpg", "fogo3.jpg", "fogo4.jpg", "fogo5.jpg"];
-    const randomIndex = Math.floor(Math.random() * images.length);
-    this.img = `assets/images/${images[randomIndex]}`;
-
     this.createBoard();
     setTimeout(() => this.shuffle(), 1000);
     this.started = true;
@@ -76,7 +70,6 @@ class Board {
 
   moveTile(number) {
     if (!this.state?.length || this.solved) return;
-
     this.isAI = false;
 
     const [row, col] = this.findTilePos(number);
@@ -85,10 +78,10 @@ class Board {
     let newState = this.clone(this.state);
     let moved = false;
 
-    if (empty_col === col && row - 1 === empty_row ||
-        empty_col === col && row + 1 === empty_row ||
-        empty_row === row && col - 1 === empty_col ||
-        empty_row === row && col + 1 === empty_col) {
+    if (
+      (empty_col === col && Math.abs(row - empty_row) === 1) ||
+      (empty_row === row && Math.abs(col - empty_col) === 1)
+    ) {
       newState[empty_row][empty_col] = number;
       newState[row][col] = 0;
       moved = true;
@@ -100,9 +93,9 @@ class Board {
       $(".move span").text(this.moves);
       this.placeTiles();
 
-      // 🔊 Play puzzle slide sound if enabled
-      if (typeof playSound === "function" && window.soundEnabled) {
-        playSound("puzzle");
+      // 🔊 Play sound if not AI and sound function exists
+      if (!this.isAI && typeof playSound === "function") {
+        playSound(slideSound);
       }
     }
   }
