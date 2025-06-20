@@ -1,35 +1,190 @@
-/* General */
-* { box-sizing: border-box; margin: 0; padding: 0; }
-body { font-family: 'Ubuntu', sans-serif; background: #fef9f0; color: #333; display: flex; flex-direction: column; min-height: 100vh; }
-a { color: #ff4500; text-decoration: none; }
+/* Reset and Base */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
 
-/* Header */
-header { text-align: center; padding: 2rem; }
-header h1 { font-size: 1.5rem; }
+body {
+  font-family: 'Segoe UI', sans-serif;
+  background: linear-gradient(to bottom right, #ffecd2, #fcb69f);
+  color: #111;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  padding: 20px;
+}
 
-/* Start button */
-.start-btn { padding: .8rem 1.6rem; background: #ff4500; color: white; border: none; border-radius: 4px; cursor: pointer; font-size: 1rem; }
+/* 🔥 Title / Challenge Text */
+h1 {
+  font-size: 28px;
+  font-weight: bold;
+  margin-bottom: 20px;
+  text-align: center;
+  color: #d73f09;
+}
 
-/* Sound toggle */
-.sound-toggle { position: absolute; top: 1rem; right: 1rem; }
+/* 🎮 Controls and Move Counter */
+.controls,
+.move {
+  margin-top: 10px;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+}
 
-/* Puzzle area */
-.board-container { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; }
-.board { position: relative; border: 5px solid #ff4500; border-radius: 8px; background: #ddd; margin-bottom: 1rem; }
-.tile { position: absolute; border: 2px solid #fff; }
-.move { margin-top: .5rem; font-size: 1.1rem; }
+.controls button {
+  padding: 10px 20px;
+  font-size: 16px;
+  background: #ff6a00;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: 0.3s;
+}
 
-/* Controls */
-.controls { display: flex; gap: .5rem; margin-bottom: 1rem; }
-.controls button { background: #ff4500; color: white; border: none; padding: .6rem 1.2rem; border-radius: 4px; cursor: pointer; }
+.controls button:hover {
+  background: #e65c00;
+}
 
-/* Modal */
-.modal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center; }
-.modal-content { background: white; padding: 2rem; border-radius: 8px; text-align: center; }
-.modal-content button { padding: .6rem 1.2rem; margin: .5rem; background: #ff4500; color: white; border: none; border-radius: 4px; cursor: pointer; }
+.move {
+  font-size: 18px;
+  font-weight: 500;
+}
 
-/* Footer */
-footer { text-align: center; padding: 1rem; background: #fff5e6; font-size: .9rem; }
+/* 🔊 Sound Toggle */
+.sound-toggle {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  font-size: 14px;
+}
 
-/* Hidden helper */
-.hidden { display: none; }
+.sound-toggle label {
+  margin-right: 8px;
+  font-weight: 600;
+}
+
+/* 🧩 Puzzle Board */
+.board {
+  position: relative;
+  width: 500px;
+  height: 500px;
+  background: #fff3e0;
+  border: 2px solid #ffa726;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+  margin: 20px auto;
+}
+
+/* 🧩 Tiles */
+.tile {
+  position: absolute;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  font-size: 22px;
+  font-weight: bold;
+  border: 1px solid #ffffff20;
+  border-radius: 4px;
+  color: #000;
+  user-select: none;
+  background-color: #ffcc80;
+  background-size: cover;
+  background-repeat: no-repeat;
+}
+
+.tile p.number {
+  z-index: 2;
+}
+
+/* 🎉 Modal on Victory */
+.victory-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #fff8f0;
+  padding: 30px;
+  border-radius: 12px;
+  border: 2px solid #ff6a00;
+  box-shadow: 0 0 20px rgba(0,0,0,0.3);
+  text-align: center;
+  z-index: 9999;
+}
+
+.victory-modal h2 {
+  font-size: 24px;
+  color: #ff5722;
+  margin-bottom: 10px;
+}
+
+.victory-modal p {
+  font-size: 18px;
+  margin: 8px 0;
+}
+
+.victory-modal button {
+  background: #ff6a00;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  margin-top: 15px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.victory-modal button:hover {
+  background: #e65c00;
+}
+
+/* 🚀 Start Screen */
+.start-screen {
+  text-align: center;
+  margin-bottom: 30px;
+}
+
+.start-screen button {
+  background: #ff5722;
+  color: white;
+  border: none;
+  padding: 12px 24px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+  margin-top: 15px;
+  transition: 0.3s;
+}
+
+.start-screen button:hover {
+  background: #d84315;
+}
+
+/* 🔻 Footer */
+footer {
+  margin-top: auto;
+  padding: 15px;
+  text-align: center;
+  font-size: 14px;
+  color: #555;
+}
+
+footer a {
+  color: #ff6a00;
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+}
+
+footer .credits {
+  margin-top: 5px;
+  font-weight: 500;
+}
