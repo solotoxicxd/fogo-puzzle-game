@@ -98,6 +98,13 @@ body {
   }
 
   .tile {
-    font-size: 20px;
+  border: 1px solid #fff;
+  box-sizing: border-box;
+  background-color: yellow;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 2rem;
+  font-weight: bold;
   }
 }
