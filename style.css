@@ -73,3 +73,36 @@ footer a {
   color: #ff5e3a;
   text-decoration: none;
 }
+.end-popup h2 {
+  font-size: 24px;
+  margin-bottom: 12px;
+}
+.end-popup .roast {
+  font-style: italic;
+  color: #ff8c42;
+}
+.end-popup .rank-title {
+  margin-top: 10px;
+  font-size: 18px;
+}
+.popup-buttons {
+  margin-top: 20px;
+}
+.share-btn {
+  display: inline-block;
+  background: #1da1f2;
+  color: white;
+  padding: 10px 18px;
+  border-radius: 8px;
+  text-decoration: none;
+  margin-right: 10px;
+  font-weight: bold;
+}
+.play-again {
+  background: #ff3c00;
+  border: none;
+  padding: 10px 18px;
+  border-radius: 8px;
+  color: white;
+  cursor: pointer;
+}
