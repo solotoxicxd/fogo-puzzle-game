@@ -2,8 +2,8 @@ let soundEnabled = true;
 let lastPlayTime = 0;
 
 // Load audio files
-const slideSound = new Audio("assets/sounds/slide.mp3");
-const clickSound = new Audio("assets/sounds/click.mp3");
+const slideSound = new Audio("assets/audio/slide.mp3");
+const clickSound = new Audio("assets/audio/click.mp3");
 slideSound.volume = 0.6;
 clickSound.volume = 0.6;
 
