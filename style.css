@@ -1,37 +1,102 @@
+/* 🌐 Global Reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
 body {
-  margin: 0;
-  font-family: sans-serif;
-  background: #fff;
+  font-family: 'Segoe UI', sans-serif;
+  background: #fffaf5;
   display: flex;
   flex-direction: column;
   align-items: center;
+  min-height: 100vh;
+  padding-top: 60px;
 }
+
+/* 🧩 Puzzle Board */
 .board {
   position: relative;
-  margin-top: 80px;
+  display: grid;
+  gap: 2px;
+  margin-top: 20px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
 }
+
+/* 🔳 Puzzle Tiles */
 .tile {
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 24px;
   font-weight: bold;
+  background-color: #fcd9b8;
+  border-radius: 4px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.2s ease;
 }
+
+/* 🎮 Control Buttons */
 .controls {
-  margin-top: 20px;
+  margin-top: 30px;
+  display: flex;
+  gap: 12px;
 }
+
+.controls button {
+  padding: 10px 16px;
+  font-size: 16px;
+  background-color: #ff7139;
+  border: none;
+  border-radius: 6px;
+  color: #fff;
+  cursor: pointer;
+  transition: background 0.2s ease;
+}
+
+.controls button:hover {
+  background-color: #ff4400;
+}
+
+/* 📈 Move Counter */
+.move {
+  margin-top: 12px;
+  font-size: 16px;
+  color: #333;
+}
+
+/* 🔈 Sound Toggle */
 .sound-toggle {
   position: absolute;
   top: 15px;
   right: 15px;
   font-size: 14px;
   z-index: 10;
-  background: rgba(255, 255, 255, 0.8);
+  background: rgba(255, 255, 255, 0.85);
   padding: 6px 10px;
-  border-radius: 5px;
+  border-radius: 6px;
   user-select: none;
+  box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
 }
+
 .sound-toggle input {
   margin-left: 6px;
+}
+
+/* 📱 Responsive Layout */
+@media (max-width: 600px) {
+  .controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .controls button {
+    width: 140px;
+  }
+
+  .tile {
+    font-size: 20px;
+  }
 }
