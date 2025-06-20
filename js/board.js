@@ -21,15 +21,22 @@ class Board {
   }
 
   start() {
-    if (this.solved) return;
-    if (this.started) {
-      this.shuffle();
-      return;
-    }
-    this.createBoard();
-    setTimeout(() => this.shuffle(), 1000);
-    this.started = true;
+  if (this.solved) return;
+  if (this.started) {
+    this.shuffle();
+    return;
   }
+
+  // 🔥 Set random image before creating the board
+  const images = ["fogo1.png", "fogo2.png", "fogo3.png", "fogo4.png", "fogo5.png"];
+  const randomIndex = Math.floor(Math.random() * images.length);
+  this.img = `assets/images/${images[randomIndex]}`;
+
+  this.createBoard();
+  setTimeout(() => this.shuffle(), 1000);
+  this.started = true;
+  }
+ 
 
   createBoard() {
     const board = $(".board");
